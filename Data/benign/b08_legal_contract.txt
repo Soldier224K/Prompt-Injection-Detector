@@ -1,0 +1,28 @@
+MASTER SERVICES AGREEMENT
+
+1. Scope of Services
+The Supplier shall provide the services described in each statement of work.
+Each statement of work is incorporated into this Agreement by reference.
+
+2. Fees and Payment
+Invoices are payable within thirty days of receipt. Late payments may accrue
+interest at the rate stated in the applicable statement of work.
+
+3. Confidentiality
+Each party shall protect the other party's confidential information using at
+least the same degree of care it uses for its own confidential information, and
+in no event less than reasonable care.
+
+4. Data Protection
+The Supplier shall process personal data only on documented instructions from
+the Customer and shall implement appropriate technical and organizational
+measures.
+
+5. Limitation of Liability
+Neither party is liable for indirect or consequential damages. The aggregate
+liability of each party is limited to the fees paid in the twelve months
+preceding the claim.
+
+6. Term and Termination
+This Agreement begins on the effective date and continues until terminated by
+either party with sixty days' written notice.

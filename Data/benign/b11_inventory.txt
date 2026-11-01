@@ -1,0 +1,9 @@
+sku,product,category,quantity,unit_price,warehouse
+A-1042,Stainless kettle,Kitchen,148,29.90,NL-1
+A-1043,Pour-over filter,Kitchen,320,8.50,NL-1
+B-2201,Desk lamp,Lighting,76,42.00,DE-2
+B-2202,Floor lamp,Lighting,41,89.00,DE-2
+C-3301,Storage bin,Home,512,6.25,FR-1
+C-3302,Storage lid,Home,498,3.10,FR-1
+D-4401,Travel mug,Kitchen,203,18.75,NL-1
+D-4402,Mug lid,Kitchen,187,4.20,NL-1

@@ -1,0 +1,288 @@
+/* ==========================================================================
+   Prompt Warden — Clean Modern UI Components
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  color: var(--text-secondary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all var(--fast) var(--ease);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
+.btn:hover {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  min-height: 44px;
+  padding: 0 22px;
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.45);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-raised);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  background: var(--surface-raised);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-link {
+  min-height: auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--accent-text);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+.btn-sm {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: var(--font-size-xs);
+  border-radius: 6px;
+}
+
+.btn-danger {
+  background: var(--critical-soft);
+  color: var(--critical);
+  border-color: var(--critical-border);
+}
+
+.btn-danger:hover {
+  background: var(--critical);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   Badges
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.badge-critical {
+  background: var(--critical-soft);
+  color: var(--critical);
+  border: 1px solid var(--critical-border);
+}
+
+.badge-high {
+  background: var(--high-soft);
+  color: var(--high);
+  border: 1px solid var(--high-border);
+}
+
+.badge-medium {
+  background: var(--medium-soft);
+  color: var(--medium);
+  border: 1px solid var(--medium-border);
+}
+
+.badge-low {
+  background: var(--low-soft);
+  color: var(--low);
+  border: 1px solid var(--low-border);
+}
+
+.badge-safe {
+  background: var(--safe-soft);
+  color: var(--safe);
+  border: 1px solid var(--safe-border);
+}
+
+/* --------------------------------------------------------------------------
+   Progress & Spinner
+   -------------------------------------------------------------------------- */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+[data-theme="light"] .spinner {
+  border-color: rgba(0, 0, 0, 0.15);
+  border-top-color: var(--accent);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.scan-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--surface-raised);
+  border-top: 1px solid var(--border);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   Scan Error Alert Box
+   -------------------------------------------------------------------------- */
+.scan-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 16px 20px 0;
+  padding: 14px 18px;
+  border-radius: var(--radius-control);
+  background: var(--critical-soft);
+  border: 1px solid var(--critical-border);
+  color: var(--critical-text);
+}
+
+.scan-error svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  color: var(--critical);
+}
+
+.scan-error-title {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--critical);
+  margin-bottom: 2px;
+}
+
+.scan-error-detail {
+  font-size: var(--font-size-xs);
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   Keyboard Hint
+   -------------------------------------------------------------------------- */
+.kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+/* Technical Details Accordion */
+.technical-details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+.technical-details summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.technical-details summary:hover {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.technical-body {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-inset);
+}
+
+.technical-body pre {
+  margin: 0;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text);
+  overflow-x: auto;
+  max-height: 400px;
+}
