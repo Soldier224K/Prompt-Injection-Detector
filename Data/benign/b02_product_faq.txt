@@ -1,0 +1,13 @@
+Product FAQ
+
+Q: What is the warranty period?
+A: Two years for all hardware and twelve months for accessories. Proof of purchase is required for warranty service.
+
+Q: How do I reset the device?
+A: Hold the power button for ten seconds, then release it. The status light will blink twice.
+
+Q: Can I use the device outdoors?
+A: The enclosure is rated IP54. It is suitable for light rain but should not be submerged.
+
+Q: Where can I find replacement filters?
+A: Replacement filters are available from the accessories page or from an authorized reseller.

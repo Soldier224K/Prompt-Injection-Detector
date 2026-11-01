@@ -1,0 +1,17 @@
+[
+  {"id": "b01", "file": "b01_quarterly_review.txt", "expected_max": "CLEAN", "kind": "business_prose"},
+  {"id": "b02", "file": "b02_product_faq.txt", "expected_max": "CLEAN", "kind": "product_faq"},
+  {"id": "b03", "file": "b03_engineering_readme.md", "expected_max": "CLEAN", "kind": "code_readme"},
+  {"id": "b04", "file": "b04_config.txt", "expected_max": "CLEAN", "kind": "json_hashes_jwt_base64"},
+  {"id": "b05", "file": "b05_analytics_urls.md", "expected_max": "CLEAN", "kind": "legit_url_params"},
+  {"id": "b06", "file": "b06_multilingual_benign.txt", "expected_max": "CLEAN", "kind": "multilingual_prose"},
+  {"id": "b07", "file": "b07_security_awareness.md", "expected_max": "CLEAN", "kind": "security_guidance_no_attack_strings"},
+  {"id": "b08", "file": "b08_legal_contract.txt", "expected_max": "CLEAN", "kind": "legal_contract"},
+  {"id": "b09", "file": "b09_news_article.md", "expected_max": "CLEAN", "kind": "news_article"},
+  {"id": "b10", "file": "b10_changelog.md", "expected_max": "CLEAN", "kind": "changelog"},
+  {"id": "b11", "file": "b11_inventory.txt", "expected_max": "CLEAN", "kind": "csv_inventory"},
+  {"id": "b12", "file": "b12_meeting_notes.txt", "expected_max": "CLEAN", "kind": "meeting_notes"},
+  {"id": "b13", "file": "b13_white_on_dark.pdf", "expected_max": "CLEAN", "kind": "visible_white_text_on_dark"},
+  {"id": "b14", "file": "b14_table.docx", "expected_max": "CLEAN", "kind": "normal_table_docx"},
+  {"id": "b15", "file": "b15_base64_image.md", "expected_max": "CLEAN", "kind": "inline_binary_base64"}
+]
