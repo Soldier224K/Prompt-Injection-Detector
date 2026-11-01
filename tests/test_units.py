@@ -1,5 +1,3 @@
-import math
-
 import prompt_injection_detector as pid
 
 

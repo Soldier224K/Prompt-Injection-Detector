@@ -1,4 +1,8 @@
-# Prompt-Injection-Detector
+# Prompt Warden
+
+<p align="center">
+  <img src="static/img/logo-mark.png" alt="Prompt Warden Logo" width="140" />
+</p>
 
 > **Zero-trust document firewall against direct and indirect prompt injection for RAG systems, LLM summarizers, and autonomous agents.**
 

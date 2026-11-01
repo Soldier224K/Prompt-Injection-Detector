@@ -1,272 +1,601 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark light">
-  <meta name="description" content="Prompt Warden — Inspect prompts and documents for prompt injection, hidden instructions, and structural anomalies.">
-  <title>Prompt Warden — Prompt Injection Inspector & Document Security Guardrail</title>
+  <meta name="color-scheme" content="dark">
+  <meta name="description"
+    content="Inspect untrusted text and documents for prompt injection, hidden instructions, and structural anomalies.">
+  <title>Prompt Warden — LLM01 security workspace</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/tokens.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
 </head>
+
 <body>
-  <!-- Global Icon Sprite -->
+  <!-- Icon sprite -->
   <svg aria-hidden="true" class="sr-only" xmlns="http://www.w3.org/2000/svg">
-    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3 4.8 6v5.4c0 4.6 2.9 7.8 7.2 9.6 4.3-1.8 7.2-5 7.2-9.6V6L12 3Z"/><path d="m9.2 12 1.9 1.9 3.8-3.8"/>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3 4.8 6v5.4c0 4.6 2.9 7.8 7.2 9.6 4.3-1.8 7.2-5 7.2-9.6V6L12 3Z" />
+      <path d="m9.2 12 1.9 1.9 3.8-3.8" />
     </symbol>
-    <symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M4 8V5.8C4 4.8 4.8 4 5.8 4H8M16 4h2.2c1 0 1.8.8 1.8 1.8V8M20 16v2.2c0 1-.8 1.8-1.8 1.8H16M8 20H5.8c-1 0-1.8-.8-1.8-1.8V16"/><path d="M8 12h8M12 8v8"/>
+    <symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path
+        d="M4 8V5.8C4 4.8 4.8 4 5.8 4H8M16 4h2.2c1 0 1.8.8 1.8 1.8V8M20 16v2.2c0 1-.8 1.8-1.8 1.8H16M8 20H5.8c-1 0-1.8-.8-1.8-1.8V16" />
+      <path d="M8 12h8M12 8v8" />
     </symbol>
-    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M5 14v3.2A2.8 2.8 0 0 0 7.8 20h8.4a2.8 2.8 0 0 0 2.8-2.8V14"/>
+    <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="4" width="16" height="6" rx="1.5" />
+      <rect x="4" y="14" width="16" height="6" rx="1.5" />
+      <path d="M8 7h.01M8 17h.01M12 7h4M12 17h4" />
     </symbol>
-    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M7 3.5h6l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M13 3.5V8h4M9 12h6M9 16h6"/>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+      <path d="M4 7h16M4 12h16M4 17h16" />
     </symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 4 3.8 18a1.4 1.4 0 0 0 1.2 2h14a1.4 1.4 0 0 0 1.2-2L12 4Z"/><path d="M12 9v4M12 16.5h.01"/>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+      <path d="m6 6 12 12M18 6 6 18" />
     </symbol>
-    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m5 12.5 4.2 4.2L19 7"/>
+    <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="m9 6 6 6-6 6" />
     </symbol>
-    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20 7v5h-5M4 17v-5h5"/><path d="M18.6 9A7 7 0 0 0 6.7 5.5L4 9m16 6-2.7 3.5A7 7 0 0 1 5.4 15"/>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M13 6l6 6-6 6" />
     </symbol>
-    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
-    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
-    <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" />
+      <path d="M5 14v3.2A2.8 2.8 0 0 0 7.8 20h8.4a2.8 2.8 0 0 0 2.8-2.8V14" />
+    </symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M7 3.5h6l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" />
+      <path d="M13 3.5V8h4M9 12h6M9 16h6" />
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M12 4 3.8 18a1.4 1.4 0 0 0 1.2 2h14a1.4 1.4 0 0 0 1.2-2L12 4Z" />
+      <path d="M12 9v4M12 16.5h.01" />
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="m5 12.5 4.2 4.2L19 7" />
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <rect x="8" y="8" width="11" height="12" rx="1.5" />
+      <path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8" />
+    </symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 7v5h-5M4 17v-5h5" />
+      <path d="M18.6 9A7 7 0 0 0 6.7 5.5L4 9m16 6-2.7 3.5A7 7 0 0 1 5.4 15" />
+    </symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M9 3v5M15 3v5M7 8h10v3a5 5 0 0 1-10 0V8ZM12 16v5" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 11v5M12 8h.01" />
+    </symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12h4l2.2-6 4.1 12L15.8 12H21" />
+    </symbol>
+    <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14" />
+    </symbol>
+    <symbol id="i-arrow-up-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 17 17 7M8 7h9v9" />
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="10.8" cy="10.8" r="6.3" />
+      <path d="m16 16 4.2 4.2" />
+    </symbol>
+    <symbol id="i-command" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path
+        d="M9 9h6v6H9zM9 9V6.5A2.5 2.5 0 1 0 6.5 9H9Zm6 0h2.5A2.5 2.5 0 1 0 15 6.5V9Zm0 6v2.5a2.5 2.5 0 1 0 2.5-2.5H15Zm-6 0H6.5A2.5 2.5 0 1 0 9 17.5V15Z" />
+    </symbol>
   </svg>
 
   <div class="app-shell" id="appShell">
-    <!-- Topbar -->
-    <header class="topbar">
-      <div class="topbar-container">
-        <a href="/" class="topbar-brand" title="Prompt Warden Home">
-          <img src="{{ url_for('static', filename='img/logo-symbol.png') }}" alt="Prompt Warden Logo" class="brand-logo-img">
-          <div class="brand-copy">
-            <span class="brand-name">Prompt Warden</span>
-            <span class="brand-badge">Guardrail AI</span>
-          </div>
-        </a>
-
-        <div class="topbar-actions">
-          <div class="status-pill" title="Security guardrail active and monitoring">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span>Guardrail Active</span>
-          </div>
-
-          <!-- Theme Toggle Button -->
-          <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle light or dark theme" title="Switch Theme">
-            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-            </svg>
-            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-            </svg>
-          </button>
-
-          <button class="btn btn-secondary btn-sm" id="newScanBtn" type="button" hidden>
-            <svg aria-hidden="true"><use href="#i-refresh"></use></svg>
-            New Scan
-          </button>
+    <aside class="sidebar" id="sidebar" aria-label="Workspace navigation">
+      <div class="sidebar-brand">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="{{ url_for('static', filename='img/logo-mark.png') }}" alt="Prompt Warden" class="brand-logo-img">
+        </div>
+        <div class="brand-copy">
+          <div class="brand-name">Prompt Warden</div>
+          <div class="brand-sub">LLM01 security</div>
         </div>
       </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main-wrap">
-      <!-- Hero Header -->
-      <section class="hero-header">
-        <div class="hero-heading">
-          <div class="eyebrow">Zero-Trust AI Guardrail</div>
-          <h1 class="page-title" id="scannerTitle">Prompt Warden</h1>
-          <p class="page-description">
-            Inspect text prompts and documents (PDF, Word, Markdown, Text) for prompt injection, hidden instruction overrides, and data exfiltration before they reach your LLMs.
-          </p>
-        </div>
-      </section>
+      <nav class="sidebar-nav" aria-label="Primary">
+        <div class="nav-section-label">Workspace</div>
+        <button class="nav-item" type="button" data-view="scanner" aria-current="page" title="Scanner">
+          <svg aria-hidden="true">
+            <use href="#i-scan"></use>
+          </svg>
+          <span class="nav-label">Scanner</span>
+          <span class="nav-shortcut">⌘1</span>
+        </button>
+        <button class="nav-item" type="button" data-view="engines" title="Engine status">
+          <svg aria-hidden="true">
+            <use href="#i-server"></use>
+          </svg>
+          <span class="nav-label">Engine status</span>
+          <span class="nav-shortcut">⌘2</span>
+        </button>
+      </nav>
 
-      <!-- Scan Input Panel -->
-      <section class="scan-panel" id="scanPanel" aria-label="Input to inspect">
-        <div class="scan-panel-head">
-          <div class="segmented" role="tablist" aria-label="Input mode">
-            <button class="segment" type="button" role="tab" data-mode="text" aria-selected="true" aria-controls="pane-text" id="tab-text">
-              📝 Paste Text
-            </button>
-            <button class="segment" type="button" role="tab" data-mode="file" aria-selected="false" aria-controls="pane-file" id="tab-file">
-              📁 Upload Document
-            </button>
+      <div class="sidebar-footer">
+        <div class="status-stack" aria-label="Engine summary">
+          <div class="status-row" title="Offline layers run on every scan.">
+            <span class="status-dot is-safe" aria-hidden="true"></span>
+            <span>Offline detector</span>
+            <span class="status-value">Always on</span>
           </div>
-          <div class="scan-panel-meta" id="inputMeta">PDF · DOCX · TXT · MD (Max 50MB)</div>
+          <div class="status-row" id="sidebarJudgeRow" title="External judge availability">
+            <span class="status-dot" id="sidebarJudgeDot" aria-hidden="true"></span>
+            <span>AI judge</span>
+            <span class="status-value" id="sidebarJudgeValue">Checking</span>
+          </div>
         </div>
+        <div class="sidebar-meta">
+          <span>v{{ app_version }}</span>
+          <span>·</span>
+          <span>Local workspace</span>
+        </div>
+      </div>
+    </aside>
 
-        <div class="scan-input-body">
-          <!-- Text Tab Panel -->
-          <div class="input-pane" id="pane-text" role="tabpanel" aria-labelledby="tab-text">
-            <!-- Sample Prompt Shortcuts -->
-            <div class="sample-bar">
-              <span class="sample-label">Quick test:</span>
-              <button class="sample-chip" type="button" data-sample="attack">🚨 System Override Attack</button>
-              <button class="sample-chip" type="button" data-sample="exfil">📡 Data Exfiltration</button>
-              <button class="sample-chip" type="button" data-sample="clean">✅ Safe Business Report</button>
+    <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn mobile-menu" id="menuBtn" type="button" aria-label="Open navigation"
+            aria-controls="sidebar" aria-expanded="false">
+            <svg aria-hidden="true">
+              <use href="#i-menu"></use>
+            </svg>
+          </button>
+          <div class="breadcrumb" aria-label="Breadcrumb">
+            <span>Workspace</span>
+            <span class="crumb-sep" aria-hidden="true">/</span>
+            <span class="crumb-current" id="currentCrumb">Scanner</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <div class="engine-chip" id="engineChip" title="Configured engines are checked from /engines">
+            <span class="status-dot" id="engineChipDot" aria-hidden="true"></span>
+            <span class="engine-chip-text" id="engineChipText">Checking engines</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="newScanBtn" type="button" hidden>
+            <svg aria-hidden="true">
+              <use href="#i-refresh"></use>
+            </svg>
+            New scan
+          </button>
+        </div>
+      </header>
+
+      <main class="content" id="content">
+        <!-- ============================================================
+             Scanner
+             ============================================================ -->
+        <section class="view" id="view-scanner" aria-labelledby="scannerTitle">
+          <div class="page-header">
+            <div class="page-heading">
+              <div class="eyebrow">Detection workspace</div>
+              <h1 class="page-title" id="scannerTitle">Prompt Warden</h1>
+              <p class="page-description">
+                Prompt Injection Inspector — analyze untrusted content for malicious instructions, prompt manipulation,
+                and structural anomalies before it reaches a model or tool.
+              </p>
             </div>
-
-            <div class="editor-shell">
-              <label class="sr-only" for="textInput">Text prompt to analyze</label>
-              <textarea id="textInput" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste untrusted prompt, user message, or document excerpt here..."></textarea>
-              <div class="editor-footer">
-                <span id="charCount">0 characters</span>
-                <button class="btn-link" id="clearTextBtn" type="button">Clear</button>
-                <span class="muted"><span class="kbd">⌘</span><span class="kbd">↵</span> to scan</span>
+            <div class="header-policy" aria-label="Detection policy">
+              <div class="header-policy-label">Detection policy</div>
+              <div class="header-policy-value">
+                <span class="mono">Gemini</span> primary
+                <span aria-hidden="true"> · </span>
+                <span class="mono">offline</span> fallback
+                <span aria-hidden="true"> · </span>
+                <span class="mono">Ollama Cloud</span> last
               </div>
             </div>
           </div>
 
-          <!-- File Tab Panel -->
-          <div class="input-pane" id="pane-file" role="tabpanel" aria-labelledby="tab-file" hidden>
-            <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Choose a document to inspect">
-              <div class="dropzone-icon" aria-hidden="true"><svg><use href="#i-upload"></use></svg></div>
-              <div class="dropzone-title">Drag &amp; drop document to inspect</div>
-              <div class="dropzone-help" id="uploadHelp">or click to browse files from your computer</div>
-              <div class="dropzone-formats">PDF · DOCX · TXT · MD · MAX 50 MB</div>
-              <input class="sr-only" type="file" id="fileInput" accept=".pdf,.docx,.txt,.md,.markdown,.text,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown">
+          <section class="scan-panel" id="scanPanel" aria-label="Scan input">
+            <div class="scan-panel-head">
+              <div class="segmented" role="tablist" aria-label="Input mode">
+                <button class="segment" type="button" role="tab" data-mode="text" aria-selected="true"
+                  aria-controls="pane-text" id="tab-text">Paste text</button>
+                <button class="segment" type="button" role="tab" data-mode="file" aria-selected="false"
+                  aria-controls="pane-file" id="tab-file">Upload document</button>
+              </div>
+              <div class="scan-panel-meta" id="inputMeta">Text · UTF-8 · saved only for this request</div>
             </div>
 
-            <div class="file-card" id="fileCard" hidden>
-              <div class="file-info">
-                <div class="file-icon" aria-hidden="true"><svg><use href="#i-file"></use></svg></div>
-                <div>
-                  <div class="file-name" id="fileName">document.pdf</div>
-                  <div class="file-meta" id="fileMeta"><span id="fileType">PDF</span> · <span id="fileSize">1.2 MB</span></div>
+            <div class="scan-input-body">
+              <div class="input-pane" id="pane-text" role="tabpanel" aria-labelledby="tab-text">
+                <div class="editor-shell">
+                  <div class="line-numbers" id="lineNumbers" aria-hidden="true">1</div>
+                  <label class="sr-only" for="textInput">Untrusted text to inspect</label>
+                  <textarea id="textInput" spellcheck="false" autocomplete="off" autocapitalize="off"
+                    placeholder="Paste untrusted text here.&#10;&#10;Examples: a retrieved document, an email body, a tool result, or a support ticket."></textarea>
+                </div>
+                <div class="editor-footer">
+                  <span id="charCount">0 characters</span>
+                  <button class="btn btn-link" id="clearTextBtn" type="button">Clear</button>
+                  <span class="editor-hint"><span class="kbd">⌘</span><span class="kbd">↵</span> to analyze</span>
                 </div>
               </div>
-              <button class="btn btn-secondary btn-sm" id="removeFileBtn" type="button">Remove</button>
-            </div>
-            <div class="field-error" id="fileError" role="alert" hidden></div>
-          </div>
-        </div>
 
-        <!-- Scan Error Alert -->
-        <div class="scan-error" id="scanError" role="alert" hidden>
-          <svg aria-hidden="true"><use href="#i-alert"></use></svg>
-          <div>
-            <div class="scan-error-title">Scan Interrupted</div>
-            <div class="scan-error-detail" id="scanErrorDetail"></div>
-          </div>
-        </div>
-
-        <!-- Progress Spinner -->
-        <div class="scan-progress" id="scanProgress" hidden aria-live="polite">
-          <span class="spinner" aria-hidden="true"></span>
-          <span id="scanProgressText">Analyzing layers &amp; checking for prompt injection...</span>
-        </div>
-
-        <!-- Action / Controls Bar -->
-        <div class="config-bar">
-          <div class="config-options">
-            <div class="select-wrapper">
-              <select class="select-control" id="provider" aria-label="Detection Engine">
-                <option value="auto" selected>⚡ Auto Guardrail (Offline + AI)</option>
-                <option value="offline">🔒 Offline Only (100% Private, Zero Network)</option>
-                <option value="ollama-cloud">🧠 Deep AI Judge (Ollama Cloud)</option>
-              </select>
-              <div class="select-arrow" aria-hidden="true">
-                <svg width="14" height="14"><use href="#i-chevron"></use></svg>
+              <div class="input-pane" id="pane-file" role="tabpanel" aria-labelledby="tab-file" hidden>
+                <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Choose a document to analyze"
+                  aria-describedby="uploadHelp">
+                  <div class="dropzone-icon" aria-hidden="true"><svg>
+                      <use href="#i-upload"></use>
+                    </svg></div>
+                  <div class="dropzone-title">Drop a document to inspect</div>
+                  <div class="dropzone-help" id="uploadHelp">or <span class="mono">choose a file</span> from this device
+                  </div>
+                  <div class="dropzone-formats">PDF · DOCX · TXT · MD · MARKDOWN · TEXT · MAX 50 MB</div>
+                  <input class="sr-only" type="file" id="fileInput"
+                    accept=".pdf,.docx,.txt,.md,.markdown,.text,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown">
+                  <button class="btn btn-secondary btn-sm" id="chooseFileBtn" type="button">Choose file</button>
+                </div>
+                <div class="file-card" id="fileCard" hidden>
+                  <div class="file-icon" aria-hidden="true"><svg>
+                      <use href="#i-file"></use>
+                    </svg></div>
+                  <div class="file-copy">
+                    <div class="file-name" id="fileName"></div>
+                    <div class="file-meta">
+                      <span id="fileType"></span>
+                      <span id="fileSize"></span>
+                      <span class="file-ready" id="fileReady">Ready to analyze</span>
+                    </div>
+                  </div>
+                  <button class="icon-btn" id="removeFileBtn" type="button" aria-label="Remove selected file"
+                    data-tooltip="Remove file">
+                    <svg aria-hidden="true">
+                      <use href="#i-x"></use>
+                    </svg>
+                  </button>
+                </div>
+                <div class="field-error" id="fileError" role="alert" hidden></div>
               </div>
             </div>
-          </div>
 
-          <div class="scan-action">
-            <button class="btn btn-primary" id="analyzeBtn" type="button" disabled>
-              <span id="analyzeLabel">Scan for Injections</span>
-              <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================
-           Results Section
-           ============================================================ -->
-      <section class="results-root" id="resultsRoot" aria-labelledby="resultsTitle" hidden>
-        <!-- Hero Verdict Card -->
-        <div class="verdict-banner" id="verdictPanel">
-          <div class="verdict-info">
-            <div class="verdict-icon" id="verdictIconWrap">
-              <svg id="verdictIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-shield"></use></svg>
+            <div class="scan-error" id="scanError" role="alert" hidden>
+              <svg aria-hidden="true">
+                <use href="#i-alert"></use>
+              </svg>
+              <div class="scan-error-body">
+                <div class="scan-error-title">Analysis failed</div>
+                <div class="scan-error-detail" id="scanErrorDetail"></div>
+              </div>
+              <button class="btn btn-sm btn-danger" id="retryScanBtn" type="button">Retry</button>
             </div>
-            <div>
-              <div class="verdict-status" id="verdictLabel">CLEAN</div>
-              <p class="verdict-summary" id="verdictDescription">No prompt-injection payloads detected. Safe to process with downstream LLMs.</p>
+
+            <div class="scan-progress" id="scanProgress" hidden aria-live="polite">
+              <span class="spinner" aria-hidden="true"></span>
+              <span id="scanProgressText">Running detection layers…</span>
+              <span class="scan-progress-note" id="scanProgressNote">No percentage is reported by the backend.</span>
             </div>
-          </div>
 
-          <div class="verdict-score-box">
-            <div><span class="score-num" id="verdictScore">0</span><span class="score-max">/100</span></div>
-            <div class="score-label" id="verdictHuman">Safe &amp; Clean</div>
-          </div>
-        </div>
+            <div class="config-bar">
+              <div class="config-primary">
+                <label class="field" for="provider">
+                  <span class="field-label">Provider</span>
+                  <select class="select-control" id="provider">
+                    <option value="auto" selected>Auto · Gemini → offline → Ollama Cloud</option>
+                    <option value="gemini">Gemini</option>
+                    <option value="offline">Offline only</option>
+                    <option value="ollama-cloud">Ollama Cloud</option>
+                  </select>
+                </label>
+                <label class="field" for="model">
+                  <span class="field-label">Model <span class="optional">optional</span></span>
+                  <input class="field-control is-mono" id="model" type="text" placeholder="Provider default"
+                    autocomplete="off" spellcheck="false">
+                </label>
+                <label class="field" for="maxJudges">
+                  <span class="field-label">Max judge calls</span>
+                  <input class="input-control is-mono" id="maxJudges" type="number" min="0" max="50" step="1" value="8"
+                    inputmode="numeric">
+                </label>
+                <button class="btn btn-ghost btn-sm" id="advancedToggle" type="button" aria-expanded="false"
+                  aria-controls="advancedPanel">
+                  Advanced
+                  <svg aria-hidden="true">
+                    <use href="#i-chevron"></use>
+                  </svg>
+                </button>
+              </div>
+              <div class="config-action">
+                <div class="offline-note"
+                  title="Offline layers run on every scan. Auto may still send selected chunks to Gemini or Ollama Cloud.">
+                  <span class="status-dot is-safe" aria-hidden="true"></span>Offline detection always runs</div>
+                <button class="btn btn-primary" id="analyzeBtn" type="button" disabled>
+                  <span id="analyzeLabel">Analyze text</span>
+                  <svg aria-hidden="true">
+                    <use href="#i-arrow-right"></use>
+                  </svg>
+                </button>
+              </div>
+            </div>
 
-        <!-- Key Metrics Cards -->
-        <div class="metrics-grid">
-          <div class="metric-card">
-            <div class="metric-title">Recommendation</div>
-            <div class="metric-val" id="metricRecommendation">Allow Ingestion</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-title">Chunks Scanned</div>
-            <div class="metric-val" id="metricChunks">1</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-title">Highest Risk Category</div>
-            <div class="metric-val" id="metricCategory">None (Clean)</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-title">Detection Method</div>
-            <div class="metric-val" id="metricMethod">Multi-Layer Guardrail</div>
-          </div>
-        </div>
+            <div class="advanced-panel" id="advancedPanel" hidden>
+              <label class="checkbox-row" for="judgeAll">
+                <input type="checkbox" id="judgeAll">
+                <span class="checkbox-copy">
+                  Judge every chunk
+                  <span class="checkbox-help">Use more model calls on long documents. Useful when a document quotes
+                    attack strings.</span>
+                </span>
+              </label>
+              <p>
+                Offline rule, structural, decode, and entropy layers run independently of the selected provider.
+                Auto sends extracted text to Gemini when configured; if Gemini is unavailable, offline evidence decides
+                the verdict, and Ollama Cloud is tried last only when its key is configured. Offline only keeps the
+                request local.
+              </p>
+            </div>
+          </section>
 
-        <!-- Findings List -->
-        <section class="findings-section">
-          <div class="findings-header">
-            <h2 class="findings-title">Threat Findings &amp; Evidence</h2>
-            <span class="badge badge-safe" id="findingsCountBadge">0 Flags</span>
-          </div>
+          <!-- ============================================================
+               Results
+               ============================================================ -->
+          <section class="results-root" id="resultsRoot" aria-labelledby="resultsTitle" hidden>
+            <div class="results-topline">
+              <div>
+                <div class="section-kicker">Investigation</div>
+                <h2 class="section-heading" id="resultsTitle">Scan result</h2>
+              </div>
+              <div class="status-label" id="resultsSource"></div>
+            </div>
 
-          <div class="findings-list" id="findingsList">
-            <!-- Dynamic findings rendered here -->
-          </div>
+            <section class="verdict-panel" id="verdictPanel" aria-live="polite">
+              <div class="verdict-main">
+                <div class="verdict-kicker"><span class="rule" aria-hidden="true"></span> Detection verdict</div>
+                <div class="verdict-line">
+                  <span class="verdict-label" id="verdictLabel">—</span>
+                  <span class="verdict-human" id="verdictHuman"></span>
+                  <span class="verdict-score"><span id="verdictScore">—</span><small>/100</small></span>
+                </div>
+                <p class="verdict-description" id="verdictDescription"></p>
+              </div>
+              <div class="verdict-meta" id="verdictMeta"></div>
+            </section>
 
-          <div class="findings-empty" id="findingsEmpty" hidden style="text-align:center; padding:32px 16px;">
-            <svg style="width:36px;height:36px;margin:0 auto 10px;color:var(--safe)"><use href="#i-check"></use></svg>
-            <div style="font-weight:600;font-size:var(--font-size-md);color:var(--text);margin-bottom:4px">No Security Flags Found</div>
-            <div style="color:var(--text-muted);font-size:var(--font-size-sm)">This document passed all rule patterns, hidden formatting checks, and steganography analysis.</div>
-          </div>
+            <section class="analysis-panel" aria-labelledby="analysisTitle">
+              <div class="panel-heading-row">
+                <h2 class="section-heading" id="analysisTitle">Detection analysis</h2>
+                <span class="section-kicker" id="analysisSummary">Layers awaiting result</span>
+              </div>
+              <div class="layer-grid" id="layerGrid"></div>
+            </section>
+
+            <div class="results-workspace">
+              <section class="findings-panel" aria-labelledby="findingsTitle">
+                <div class="findings-head">
+                  <div class="findings-head-copy">
+                    <h2 class="section-heading" id="findingsTitle">Findings</h2>
+                    <div class="findings-count" id="findingsCount"></div>
+                  </div>
+                </div>
+                <div class="filter-bar" id="filterBar" aria-label="Finding filters"></div>
+                <div class="findings-table-wrap" id="findingsTableWrap">
+                  <table class="findings-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Severity</th>
+                        <th scope="col">Finding</th>
+                        <th scope="col">Source</th>
+                        <th scope="col">Evidence</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Score</th>
+                      </tr>
+                    </thead>
+                    <tbody id="findingsBody"></tbody>
+                  </table>
+                </div>
+                <div class="findings-empty" id="findingsEmpty" hidden>
+                  <svg aria-hidden="true">
+                    <use href="#i-check"></use>
+                  </svg>
+                  <div class="findings-empty-title" id="findingsEmptyTitle">No findings at current thresholds</div>
+                  <div class="findings-empty-copy" id="findingsEmptyCopy">Offline analysis completed without a flagged
+                    chunk. Review the technical report for the raw detector response.</div>
+                </div>
+              </section>
+
+              <aside class="evidence-panel" id="evidencePanel" aria-label="Evidence inspector">
+                <div class="evidence-head">
+                  <div class="evidence-head-title">
+                    <svg aria-hidden="true">
+                      <use href="#i-search"></use>
+                    </svg>
+                    Evidence inspector
+                  </div>
+                  <button class="icon-btn evidence-close" id="evidenceClose" type="button"
+                    aria-label="Close evidence inspector">
+                    <svg aria-hidden="true">
+                      <use href="#i-x"></use>
+                    </svg>
+                  </button>
+                </div>
+                <div class="evidence-body" id="evidenceBody">
+                  <div class="evidence-empty" id="evidenceEmpty">
+                    <svg aria-hidden="true">
+                      <use href="#i-search"></use>
+                    </svg>
+                    <div class="evidence-empty-title">Select a finding</div>
+                    <div class="evidence-empty-copy">Inspect extracted text, rule evidence, and the judge’s assessment
+                      in context.</div>
+                  </div>
+                  <div id="evidenceContent" hidden></div>
+                </div>
+              </aside>
+            </div>
+
+            <div class="evidence-backdrop" id="evidenceBackdrop" hidden></div>
+
+            <details class="technical-details" id="technicalDetails">
+              <summary>
+                <svg aria-hidden="true">
+                  <use href="#i-chevron"></use>
+                </svg>
+                Technical report
+                <span class="section-kicker" style="margin-left:auto">Raw backend response</span>
+              </summary>
+              <div class="technical-body">
+                <div class="technical-meta" id="technicalMeta"></div>
+                <div class="technical-block">
+                  <div class="technical-block-head">
+                    <span class="technical-block-title">Raw JSON</span>
+                    <button class="btn btn-xs btn-secondary" id="copyJsonBtn" type="button">
+                      <svg aria-hidden="true">
+                        <use href="#i-copy"></use>
+                      </svg>
+                      Copy JSON
+                    </button>
+                  </div>
+                  <pre class="raw-json" id="rawJson"></pre>
+                </div>
+              </div>
+            </details>
+          </section>
         </section>
 
-        <!-- Technical Report Details (Accordion) -->
-        <details class="technical-details">
-          <summary>
-            <svg width="14" height="14" style="transform:rotate(-90deg)"><use href="#i-chevron"></use></svg>
-            <span>Technical Audit Data (Raw JSON)</span>
-          </summary>
-          <div class="technical-body">
-            <pre><code id="technicalJson">// JSON payload</code></pre>
+        <!-- ============================================================
+             Engines
+             ============================================================ -->
+        <section class="view" id="view-engines" aria-labelledby="enginesTitle" hidden>
+          <div class="page-header">
+            <div class="page-heading">
+              <div class="eyebrow">Runtime configuration</div>
+              <h1 class="page-title" id="enginesTitle">Engine status</h1>
+              <p class="page-description">
+                Inspect the detection chain, provider credentials, and tested connectivity.
+                Configuration is not the same as a working connection.
+              </p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-secondary btn-sm" id="refreshEnginesBtn" type="button">
+                <svg aria-hidden="true">
+                  <use href="#i-refresh"></use>
+                </svg>
+                Refresh
+              </button>
+              <button class="btn btn-primary btn-sm" id="probeEnginesBtn" type="button">
+                <svg aria-hidden="true">
+                  <use href="#i-plug"></use>
+                </svg>
+                Test connections
+              </button>
+            </div>
           </div>
-        </details>
-      </section>
-    </main>
+
+          <div class="policy-banner">
+            <div>
+              <div class="policy-title"><span class="status-dot is-accent" aria-hidden="true"></span>Auto detection
+                policy</div>
+              <p class="policy-copy" id="policyCopy">
+                Offline detection always runs. Auto uses Gemini first; if Gemini is unavailable or
+                fails, offline evidence decides the verdict. Ollama Cloud is the last-resort semantic judge.
+              </p>
+            </div>
+            <div class="policy-chain" id="policyChain" aria-label="Auto chain">
+              <span class="chain-node is-primary">Gemini</span>
+              <span class="chain-arrow" aria-hidden="true">→</span>
+              <span class="chain-node">Offline</span>
+              <span class="chain-arrow" aria-hidden="true">→</span>
+              <span class="chain-node">Ollama Cloud</span>
+            </div>
+          </div>
+
+          <section class="engine-panel" aria-labelledby="providerMatrixTitle">
+            <div class="engine-panel-head">
+              <div>
+                <h2 class="section-heading" id="providerMatrixTitle">Provider matrix</h2>
+                <div class="engine-panel-head-meta" id="engineLastChecked">Awaiting engine status</div>
+              </div>
+              <div class="status-label" id="probeStatus"></div>
+            </div>
+            <div class="scan-error" id="engineError" role="alert" hidden>
+              <svg aria-hidden="true">
+                <use href="#i-alert"></use>
+              </svg>
+              <div class="scan-error-body">
+                <div class="scan-error-title">Engine status unavailable</div>
+                <div class="scan-error-detail" id="engineErrorDetail"></div>
+              </div>
+            </div>
+            <div class="engine-loading" id="engineLoading">
+              <span class="spinner" aria-hidden="true"></span>
+              Reading engine configuration…
+            </div>
+            <div class="engine-table-wrap" id="engineTableWrap" hidden>
+              <table class="engine-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Engine</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Configuration</th>
+                    <th scope="col">Connectivity</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Details</th>
+                  </tr>
+                </thead>
+                <tbody id="engineTableBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <div class="engine-notes">
+            <svg aria-hidden="true">
+              <use href="#i-info"></use>
+            </svg>
+            <div>
+              Connectivity is checked only when you select <strong>Test connections</strong>. A configured key
+              is reported as “not tested” until that check succeeds. Credential values and environment
+              variable contents are never returned by the API.
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
 
-  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
 
-  <!-- Scripts -->
+  <noscript>
+    <div
+      style="position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#090b0f;color:#e8ecf2;padding:24px;text-align:center;">
+      JavaScript is required to run the scanner interface.
+    </div>
+  </noscript>
+
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   <script src="{{ url_for('static', filename='js/results.js') }}"></script>
   <script src="{{ url_for('static', filename='js/scanner.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/engines.js') }}"></script>
 </body>
+
 </html>

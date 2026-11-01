@@ -15,56 +15,6 @@
 
   const els = {};
 
-  /* ----------------------------------------------------------------------
-     Theme Management (Dark / Light)
-     ---------------------------------------------------------------------- */
-  const THEME_KEY = "prompt_warden_theme";
-
-  function getSavedTheme() {
-    try {
-      const saved = localStorage.getItem(THEME_KEY);
-      if (saved === "light" || saved === "dark") return saved;
-    } catch (_) {}
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
-      ? "light"
-      : "dark";
-  }
-
-  function applyTheme(theme) {
-    document.documentElement.setAttribute("data-theme", theme);
-    try {
-      localStorage.setItem(THEME_KEY, theme);
-    } catch (_) {}
-    const btn = $("#themeToggleBtn");
-    if (btn) {
-      btn.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
-      btn.title = theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
-    }
-  }
-
-  function toggleTheme() {
-    const current = document.documentElement.getAttribute("data-theme") || "dark";
-    const next = current === "dark" ? "light" : "dark";
-    applyTheme(next);
-    toast(`Switched to ${next} theme`, "info");
-  }
-
-  function bindThemeToggle() {
-    const btn = $("#themeToggleBtn");
-    if (btn) {
-      btn.addEventListener("click", toggleTheme);
-    }
-    try {
-      if (window.matchMedia) {
-        window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
-          if (!localStorage.getItem(THEME_KEY)) {
-            applyTheme(e.matches ? "light" : "dark");
-          }
-        });
-      }
-    } catch (_) {}
-  }
-
   function cacheElements() {
     els.sidebar = $("#sidebar");
     els.sidebarScrim = $("#sidebarScrim");
@@ -87,8 +37,6 @@
   }
 
   function init() {
-    applyTheme(getSavedTheme());
-    bindThemeToggle();
     cacheElements();
     bindNavigation();
     bindSidebar();
@@ -120,8 +68,8 @@
 
     if (els.crumb) els.crumb.textContent = view === "engines" ? "Engine status" : "Scanner";
     document.title = view === "engines"
-      ? "Engine status — Prompt Inspector"
-      : "Prompt Injection Inspector — LLM01 security";
+      ? "Engine status — Prompt Warden"
+      : "Prompt Warden — LLM01 security";
 
     if (view === "engines") closeEvidence();
     closeSidebar();
@@ -528,8 +476,6 @@
     highlightSnippets,
     copyText,
     toast,
-    applyTheme,
-    toggleTheme,
   };
 
   document.addEventListener("DOMContentLoaded", init);

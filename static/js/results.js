@@ -172,42 +172,6 @@
         : "";
       els.verdictDescription.textContent = severity.description + countText;
     }
-
-    const isThreat = severity.level === "CRITICAL" || severity.level === "HIGH";
-    const isMedium = severity.level === "MEDIUM";
-    const recText = isThreat ? "🚫 Block Ingestion" : isMedium ? "⚠️ Review Required" : "✅ Safe to Ingest";
-    const metricRec = $("#metricRecommendation");
-    if (metricRec) metricRec.textContent = recText;
-
-    const metricChunks = $("#metricChunks");
-    if (metricChunks) {
-      metricChunks.textContent = Number.isFinite(nChunks)
-        ? nChunks + " scanned (" + (nFlagged || 0) + " flagged)"
-        : "1 scanned";
-    }
-
-    const metricMethod = $("#metricMethod");
-    if (metricMethod) metricMethod.textContent = judgeLabel || "Multi-Layer Guardrail";
-
-    const metricCategory = $("#metricCategory");
-    if (metricCategory) {
-      const topCat = (data && data.chunks || [])
-        .flatMap((c) => (c.matched || []).map((m) => m.category))[0];
-      metricCategory.textContent = topCat
-        ? App().categoryLabel(topCat)
-        : (isThreat ? "Prompt Injection" : "None (Clean)");
-    }
-
-    const countBadge = $("#findingsCountBadge");
-    if (countBadge) {
-      countBadge.textContent = (nFlagged || 0) + " Threat Flags";
-      countBadge.className = "badge " + (isThreat ? "badge-critical" : (isMedium ? "badge-medium" : "badge-safe"));
-    }
-
-    const techJson = $("#technicalJson");
-    if (techJson) {
-      techJson.textContent = JSON.stringify(data, null, 2);
-    }
     if (els.resultsSource) {
       els.resultsSource.innerHTML =
         '<span class="status-dot ' + (severity.tone === "safe" ? "is-safe" : "is-warn") +
@@ -567,34 +531,6 @@
 
     if (els.findingsTableWrap) {
       els.findingsTableWrap.hidden = filtered.length === 0;
-    }
-
-    const findingsList = $("#findingsList");
-    if (findingsList) {
-      if (filtered.length === 0) {
-        findingsList.innerHTML = "";
-      } else {
-        findingsList.innerHTML = filtered.map((item) => {
-          const chunk = item.chunk;
-          const sev = App().severityMeta(chunk.level);
-          const title = findingTitle(chunk);
-          const evidence = evidenceSummary(chunk);
-          const source = chunk.source || "Document Body";
-          const snippet = (chunk.matched && chunk.matched[0] && chunk.matched[0].snippet) || chunk.text || "";
-          return '<div class="finding-card">' +
-            '<div class="finding-top">' +
-              '<div class="finding-badges">' +
-                '<span class="badge badge-' + sev.tone + '">' + App().escapeHtml(sev.level) + '</span>' +
-                '<span class="badge-source">' + App().escapeHtml(source) + '</span>' +
-                '<span style="font-weight:600;font-size:var(--font-size-sm);color:var(--text);margin-left:4px">' + App().escapeHtml(title) + '</span>' +
-              '</div>' +
-              '<span class="mono muted" style="font-size:var(--font-size-xs)">Risk Score: ' + (chunk.score || 0) + '/100</span>' +
-            '</div>' +
-            '<div class="finding-quote">"' + App().escapeHtml(snippet) + '"</div>' +
-            '<div class="finding-reason"><strong>Trigger Signal:</strong> ' + App().escapeHtml(evidence) + '</div>' +
-          '</div>';
-        }).join("");
-      }
     }
     if (els.findingsEmpty) {
       const hasFindings = state.findings.length > 0;
