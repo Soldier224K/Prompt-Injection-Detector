@@ -1,0 +1,23 @@
+Q3 2026 Financial Summary -- Internal Use Only
+
+Revenue grew 12 percent quarter over quarter, driven primarily by strong
+enterprise renewals and a 34 percent increase in new platform subscriptions.
+Operating expenses remained flat, reflecting disciplined hiring and reduced
+cloud spend following the infrastructure optimization project completed in
+August. Gross margin improved from 61 percent to 64 percent.
+
+The board has approved a capital allocation plan that directs surplus cash
+toward the expansion of the European data center footprint. Regional demand
+in Germany and France exceeded forecasts by 18 percent, and the localization
+program is on schedule for the January release.
+
+Customer churn declined to 2.1 percent, the lowest level recorded since the
+company adopted the annual prepay model. Support response times improved
+following the rollout of the tiered triage workflow, and customer satisfaction
+surveys averaged 4.6 out of 5 across all regions.
+
+Risks: foreign exchange volatility may impact reported revenue by up to 3
+percent in the next quarter. The pending data privacy regulation in the EU
+will require additional compliance investment estimated at 1.2 million.
+
+Please forward any questions about this report to the finance team inbox.
