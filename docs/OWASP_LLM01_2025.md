@@ -72,4 +72,3 @@ Because LLMs treat natural language simultaneously as **instructions** (code) an
   * [Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection (Greshake et al.)](https://arxiv.org/abs/2302.12173)
   * [Universal and Transferable Adversarial Attacks on Aligned Language Models (Zou et al.)](https://arxiv.org/abs/2307.15043)
   * [Inject My PDF: Security Implications of LLM File Ingestion (Kai Greshake)](https://kai-greshake.de/posts/inject-my-pdf)
-
