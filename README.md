@@ -1,6 +1,8 @@
 # Prompt-Injection-Detector
 
 > **Zero-trust document firewall against indirect and direct prompt injection for RAG systems, LLM summarizers, and autonomous AI agents.**
+> 
+> Fully aligned with [OWASP Top 10 for LLM Applications 2025: LLM01 Prompt Injection](docs/OWASP_LLM01_2025.md).
 
 A multi-layered prompt injection detection engine and document scanner (PDF, DOCX, TXT, MD) designed to protect RAG pipelines and LLM agents from direct and indirect prompt injection attacks before payloads reach downstream models.
 
@@ -23,6 +25,7 @@ The detector uses a 3-layer inspection pipeline combining fast, deterministic of
                   | - PDF/DOCX metadata & links    |
                   | - Annotations & comments       |
                   | - Zero-width Unicode chars     |
+                  | - Unicode tag / ASCII smuggles |
                   +---------------+----------------+
                                   |
                                   v
@@ -30,7 +33,9 @@ The detector uses a 3-layer inspection pipeline combining fast, deterministic of
                   | Layer 1: Rule Engine & Lexical |
                   | - Instruction overrides        |
                   | - Role & system prompt hijacks |
-                  | - Prompt leaks & exfiltration  |
+                  | - Markdown image exfiltration  |
+                  | - Agentic / Tool abuse signals |
+                  | - Sliding window chunk overlap |
                   | - Imperative verb & 2nd-person |
                   +---------------+----------------+
                                   |
@@ -41,6 +46,7 @@ The detector uses a 3-layer inspection pipeline combining fast, deterministic of
                   | Layer 3: Semantic LLM Judge    |
                   | (Google Gemini API / Free Tier)|
                   | - Evaluates ambiguous chunks   |
+                  | - Multi-provider (Groq fallback|
                   | - Quota-guarded & auto-fallback|
                   +---------------+----------------+
                                   |
@@ -58,6 +64,13 @@ The detector uses a 3-layer inspection pipeline combining fast, deterministic of
    - Weighted regex pattern matching across critical attack categories:
      - **Instruction Overrides:** `ignore previous instructions`, `bypass rules`, `new directive`.
      - **Role / System Hijacks:** `you are now`, `[SYSTEM]`, `<|im_start|>`, `<<SYS>>`.
+     - **Prompt Leaks:** `reveal system prompt`, `repeat instructions above`.
+     - **Data Exfiltration:** Markdown image exfiltration (`![data](https://...?key=)`), webhook endpoints (`webhook.site`, `pipedream`).
+     - **Action & Tool Abuse:** Agentic tool hijacks (`<tool_call>`, function calls, `rm -rf`, `delete table`, `send email`).
+     - **Obfuscation & ASCII Smuggling:** Unicode Tag plane (`\U000E0000`–`\U000E007F`), Base64 blobs, ciphers, zero-width steganography.
+     - **Context & Delimiter Spoofing:** Fake dialogue and system context boundaries (`<user_data>`, `=== END OF SYSTEM ===`).
+   - Sliding-window chunking with overlap to defend against **Payload Splitting (Scenario #6)** across chunk boundaries.
+   - Lexical density scoring on imperative verbs, second-person pronouns, and token anomaly heuristics for adversarial suffixes (GCG).
      - **Prompt Leaks:** `reveal system prompt`, `repeat instructions above`.
      - **Data Exfiltration:** Webhook endpoints (`webhook.site`, `pipedream`), URL parameter key scraping.
      - **Action Abuse:** `delete database`, `rm -rf`, `send email`, `execute script`.

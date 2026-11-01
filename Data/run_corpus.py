@@ -20,6 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if not os.path.exists(os.path.join(HERE, "manifest.json")):      # run from scripts/ but corpus lives in download/
     HERE = "/home/z/my-project/download/prompt-injection-test-corpus"
 CANDIDATES = [
+    os.path.join(os.path.dirname(HERE), "prompt_injection_detector.py"),
     os.path.join(HERE, "prompt_injection_detector.py"),
     os.path.join(HERE, "..", "scripts", "prompt_injection_detector.py"),
     os.path.join(os.path.dirname(HERE), "prompt-injection-detector", "prompt_injection_detector.py"),
@@ -68,7 +69,10 @@ def main():
     print(f"\n--- MALICIOUS FILES ({len(manifest)}) " + "-" * 44)
     print(f" {'ID':<4}{'EXPECTED':<10}{'GOT':<10}{'SC':<6}STATUS   ATTACK / JUDGE-NEEDED")
     for m in manifest:
-        rep = pid.scan_file(os.path.join(HERE, m["file"]), args)
+        file_path = os.path.join(HERE, m["file"])
+        if not os.path.exists(file_path):
+            file_path = os.path.join(HERE, os.path.basename(m["file"]))
+        rep = pid.scan_file(file_path, args)
         got, exp = rep["verdict"], m["expected_level"]
         if LEVELS[got] >= LEVELS[exp]:
             status, det = "DETECTED", det + 1
