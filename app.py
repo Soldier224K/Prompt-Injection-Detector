@@ -470,6 +470,7 @@ def scan_file_route():
 
 # ======================================================================
 if __name__ == "__main__":
+    host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", 5001))
     engines = _engines()
     print("\nPrompt Injection Detector UI")
@@ -478,5 +479,5 @@ if __name__ == "__main__":
     print(f"   Gemini  : {'configured' if engines['gemini']['configured'] else 'not configured (offline fallback)'}")
     print(f"   Cloud   : {'configured (last resort)' if engines['ollama_cloud']['configured'] else 'not configured (optional)'}")
     print("   Local   : disabled for Auto; explicit CLI --provider ollama only")
-    print(f"   Open    : http://localhost:{port}\n")
-    app.run(debug=os.environ.get("FLASK_DEBUG") == "1", port=port)
+    print(f"   Open    : http://{'localhost' if host == '0.0.0.0' else host}:{port}\n")
+    app.run(host=host, debug=os.environ.get("FLASK_DEBUG") == "1", port=port)
