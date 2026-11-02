@@ -8,6 +8,8 @@
 
 Aligned with [OWASP Top 10 for LLM Applications 2025: LLM01 Prompt Injection](docs/OWASP_LLM01_2025.md).
 
+Live Preview : https://prompt-injection-detector-tvue.onrender.com
+
 Scans **PDF, DOCX, TXT, and MD** files before their text reaches an LLM. Offline
 detection requires **no API key, daemon, or network access**. When a semantic
 judge is enabled, the default policy is:
